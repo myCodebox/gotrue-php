@@ -4,8 +4,14 @@ namespace Supabase\Util;
 
 class GoTrueApiError extends GoTrueError
 {
+	// //protected string $code;
+	// protected string $name;
+	// public $details;
+	// public $hint;
+	// public $response;
+
 	//protected string $code;
-	protected string $name;
+	protected $name;
 	public $details;
 	public $hint;
 	public $response;

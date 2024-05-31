@@ -2,13 +2,21 @@
 
 class UserIdentity
 {
-	public string $id;
-	public string $user_id;
-	public array $identity;
-	public string $provider;
-	public string $created_at;
-	public string $last_sign_in_at;
-	public string $updated_at;
+	// public string $id;
+	// public string $user_id;
+	// public array $identity;
+	// public string $provider;
+	// public string $created_at;
+	// public string $last_sign_in_at;
+	// public string $updated_at;
+	
+	public $id;
+	public $user_id;
+	public $identity;
+	public $provider;
+	public $created_at;
+	public $last_sign_in_at;
+	public $updated_at;
 
 	public function __construct($data)
 	{

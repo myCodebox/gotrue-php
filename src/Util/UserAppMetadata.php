@@ -2,8 +2,11 @@
 
 class UserAppMetadata
 {
-	public string $provider;
-	public array $key;
+	// public string $provider;
+	// public array $key;
+	
+	public $provider;
+	public $key;
 
 	public function __construct($data)
 	{
