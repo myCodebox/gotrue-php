@@ -11,7 +11,7 @@ function handleError($err)
 	$errResponse = $err->getResponse();
 
 	$NETWORK_ERROR_CODE = [502, 503, 504];
-	if (! Helpers::isRetryAble($errResponse)) {
+	if (!Helpers::isRetryAble($errResponse)) {
 		return new AuthRetryableFetchError($err->getReasonPhrase(), 0);
 	} elseif (in_array($err->status, $NETWORK_ERROR_CODE)) {
 		return new AuthRetryableFetchError($err->getResonPhrase(), $errResponse->getStatusCode());
@@ -22,14 +22,17 @@ function handleError($err)
 
 function getRequestParams($method, $options, $params, $body)
 {
-	$_params = ['method' => $method, 'headers' => (isset($options) && isset($options->headers) ? $options->headers : [])];
+	$_params = [
+		'method'  => $method, 
+		'headers' => (isset($options) && isset($options->headers) ? $options->headers : [])
+	];
 
 	if ($method == 'GET') {
 		return $_params;
 	}
 
 	$_params['headers'] = array_merge($params['headers'], ['Content-Type' => 'application/json;charset=UTF-8']);
-	$_param['body'] = json_encode($body);
+	$_param['body']     = json_encode($body);
 
 	return array_merge($_params, $params);
 }
@@ -39,7 +42,7 @@ function _request($method, $url, $options)
 	$_a = '';
 	$headers = (isset($options) && isset($options->headers) ? $options->headers : []);
 	if (isset($options)) {
-		$headers['Authorization'] = 'Bearer '.$options['headers'];
+		$headers['Authorization'] = 'Bearer ' . $options['headers'];
 	}
 
 	$qs = ($_a = isset($options) == false ? null : $options->query) !== null && $_a != 0 ? $_a : [];
@@ -55,8 +58,8 @@ function _request($method, $url, $options)
 
 function _handleRequest($fetcher, $method, $url, $options, $params, $body)
 {
-	$client = new \GuzzleHttp\Client();
-	$opts = getRequestParams($method, $options, $params, $body);
+	$client  = new \GuzzleHttp\Client();
+	$opts    = getRequestParams($method, $options, $params, $body);
 	$request = new \GuzzleHttp\Psr7\Request($method, $url, $opts);
 
 	try {
@@ -66,7 +69,7 @@ function _handleRequest($fetcher, $method, $url, $options, $params, $body)
 
 		$response = $promise->wait();
 
-		if (! $response->ok) {
+		if (!$response->ok) {
 			throw $response;
 		}
 
@@ -75,7 +78,7 @@ function _handleRequest($fetcher, $method, $url, $options, $params, $body)
 		}
 
 		return $response->json();
-	} catch(\Exception $e) {
+	} catch (\Exception $e) {
 		throw handleError($e);
 	}
 }
@@ -84,20 +87,28 @@ function _userResponse($response)
 {
 	$user = new User($response->data);
 
-	return ['data' => ['user' => $user], 'error' => null];
+	return [
+		'data' => [
+			'user' => $user
+		], 
+		'error' => null
+	];
 }
 
 function _ssoResponse($data)
 {
-	return ['data' => $data, 'error' => null];
+	return [
+		'data' => $data, 
+		'error' => null
+	];
 }
 
 function generateQueryString($params)
 {
 	$qs = '';
 	if (count($params) > 0) {
-		$qs .= '?'.implode('&', array_map(function ($item) {
-			return $item[0].'='.$item[1];
+		$qs .= '?' . implode('&', array_map(function ($item) {
+			return $item[0] . '=' . $item[1];
 		}, array_map(null, array_keys($params), $params)));
 	}
 
@@ -115,7 +126,13 @@ function sessionResponse($data)
 
 	$user = ($_a = $data->user) !== null && $_a != 0 ? $_a : null;
 
-	return ['data' => ['user' => $user, 'session' => $session], 'error' => null];
+	return [
+		'data' => [
+			'user' => $user, 
+			'session' => $session
+		], 
+		'error' => null
+	];
 }
 
 function userResponse($data)
@@ -123,12 +140,20 @@ function userResponse($data)
 	$_a = '';
 	$user = ($_a = $data->user) !== null && $_a !== 0 ? $_a : null;
 
-	return ['data' => ['user' => $user], 'error' => null];
+	return [
+		'data' => [
+			'user' => $user
+		], 
+		'error' => null
+	];
 }
 
 function ssoResponse($data)
 {
-	return ['data' => $data, 'error' => null];
+	return [
+		'data' => $data, 
+		'error' => null
+	];
 }
 
 function generateLinkResponse($data)

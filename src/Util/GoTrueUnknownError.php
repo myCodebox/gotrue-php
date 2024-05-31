@@ -4,9 +4,6 @@ namespace Supabase\Util;
 
 class GoTrueUnknownError extends GoTrueError
 {
-	// private string $name = 'GoTrueUnknownError';
-	// private mixed $originalError = null;
-	
 	private $name = 'GoTrueUnknownError';
 	private $originalError = null;
 

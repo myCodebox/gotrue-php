@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'../../../header.php';
+include __DIR__ . '../../../header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'https';
-$domain = 'supabase.co';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -27,7 +26,7 @@ $response = $client->signInWithPassword([
 ]);
 $access_token = $response['data']['access_token'];
 $uid = $response['data']['user']['id'];
-$data = $client->mfa->enroll(['factor_type'=> 'totp'], $access_token);
+$data = $client->mfa->enroll(['factor_type' => 'totp'], $access_token);
 $factor_id = $data['data']['id'];
 $secret = $data['data']['totp']['secret'];
 unset($data['data']['totp']['qr_code']);
@@ -44,7 +43,7 @@ $responseFactorsFromAdmin = $client->admin->_listFactors($uid);
 
 foreach ($responseFactorsFromAdmin['data'] as $key => $factor) {
 	$responseFactorDelete = $client->admin->_deleteFactor($uid, $factor['id']);
-	print_r($responseFactorDelete);
+	dump($responseFactorDelete);
 }
 
 $response_delete = $client->admin->deleteUser($new_user['data']['id']);

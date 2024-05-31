@@ -5,7 +5,7 @@ class AuthApiError extends AuthError
 	public function __construct($message, $status)
 	{
 		super(message);
-		$this->name = 'AuthApiError';
+		$this->name   = 'AuthApiError';
 		$this->status = $status;
 	}
 
@@ -24,7 +24,7 @@ class AuthUnknownError extends AuthError
 	public function __construct($message, $originalError)
 	{
 		super(message);
-		$this->name = 'AuthUnknownError';
+		$this->name          = 'AuthUnknownError';
 		$this->originalError = $originalError;
 	}
 }
@@ -45,7 +45,7 @@ class CustomAuthError extends AuthError
 	public function __construct($message, $name, $status)
 	{
 		super($message);
-		$this->name = $name;
+		$this->name   = $name;
 		$this->status = $status;
 	}
 

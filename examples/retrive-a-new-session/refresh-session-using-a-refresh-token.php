@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'../../header.php';
+include __DIR__ . '../../header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'https';
-$domain = 'supabase.co';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -24,9 +23,9 @@ $result = $client->signInWithPassword([
 	'email'                => $email,
 	'password'             => 'example-password',
 ]);
-print_r($result);
+dump($result);
 $uid = $result['data']['user']['id'];
 $access_token = $result['data']['access_token'];
 $result = $client->refreshSession($access_token);
-print_r($result);
+dump($result);
 $result = $client->admin->deleteUser($uid);

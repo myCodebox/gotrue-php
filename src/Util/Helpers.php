@@ -49,7 +49,7 @@ class Helpers
 			throw new \Exception('JWT is not valid: not a JWT structure');
 		}
 
-		if (! preg_match($base64UrlRegex, $parts[1])) {
+		if (!preg_match($base64UrlRegex, $parts[1])) {
 			throw new \Exception('JWT is not valid: payload is not in base64url format');
 		}
 
@@ -68,9 +68,9 @@ class Helpers
 		} elseif (function_exists('openssl_random_pseudo_bytes')) {
 			$array = unpack('C*', openssl_random_pseudo_bytes($verifierLength));
 		} else {
-			$charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+			$charSet    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
 			$charSetLen = strlen($charSet);
-			$verifier = '';
+			$verifier   = '';
 			for ($i = 0; $i < $verifierLength; $i++) {
 				$verifier .= $charSet[mt_rand(0, $charSetLen - 1)];
 			}
@@ -83,7 +83,7 @@ class Helpers
 
 	public static function generatePKCEChallenge($verifier)
 	{
-		if (! function_exists('hash')) {
+		if (!function_exists('hash')) {
 			trigger_error('hash() function is not supported. Code challenge method will default to use plain instead of sha256.', E_USER_WARNING);
 
 			return $verifier;

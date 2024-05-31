@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A PHP  class  client library to interact with Supabase GoTrue Api.
  *
@@ -90,14 +91,14 @@ class GoTrueClient
 	public function __construct($reference_id, $api_key, $options = [], $domain = 'supabase.co', $scheme = 'https', $path = '/auth/v1')
 	{
 		$headers = ['Authorization' => "Bearer {$api_key}", 'apikey' => $api_key];
-		$this->url = ! empty($reference_id) ? "{$scheme}://{$reference_id}.{$domain}{$path}" : "{$scheme}://{$domain}{$path}";
+		$this->url = !empty($reference_id) ? "{$scheme}://{$reference_id}.{$domain}{$path}" : "{$scheme}://{$domain}{$path}";
 		$this->settings = array_merge(Constants::getDefaultHeaders(), $options);
 		$this->storageKey = $this->settings['storageKey'] ?? null;
 		$this->autoRefreshToken = $this->settings['autoRefreshToken'] ?? null;
 		$this->persistSession = $this->settings['persistSession'] ?? null;
 		$this->detectSessionInUrl = $this->settings['detectSessionInUrl'] ?? false;
 
-		if (! $this->url) {
+		if (!$this->url) {
 			throw new \Exception('No URL provided');
 		}
 
@@ -127,7 +128,7 @@ class GoTrueClient
 
 	public function initialize()
 	{
-		if (! $this->initializePromise) {
+		if (!$this->initializePromise) {
 			$this->initializePromise = $this->_initialize();
 		}
 
@@ -206,9 +207,9 @@ class GoTrueClient
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json']);
 			$body = json_encode($credentials);
 			if (isset($credentials['email'])) {
-				$data = $this->__request('POST', $this->url.'/signup', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/signup', $headers, $body);
 			} elseif (isset($credentials['phone'])) {
-				$data = $this->__request('POST', $this->url.'/signup', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/signup', $headers, $body);
 			} else {
 				throw new GoTrueError('You must provide either an email or phone number and a password');
 			}
@@ -250,9 +251,9 @@ class GoTrueClient
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json']);
 			$body = json_encode($credentials);
 			if (isset($credentials['email'])) {
-				$data = $this->__request('POST', $this->url.'/token?grant_type=password', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/token?grant_type=password', $headers, $body);
 			} elseif (isset($credentials['phone'])) {
-				$data = $this->__request('POST', $this->url.'/token?grant_type=password', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/token?grant_type=password', $headers, $body);
 			} else {
 				throw new GoTrueError('You must provide either an email or phone number and a password');
 			}
@@ -302,9 +303,9 @@ class GoTrueClient
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json']);
 			$body = json_encode($credentials);
 			if (isset($credentials['email'])) {
-				$data = $this->__request('POST', $this->url.'/otp', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/otp', $headers, $body);
 			} elseif (isset($credentials['phone'])) {
-				$data = $this->__request('POST', $this->url.'/otp', $headers, $body);
+				$data = $this->__request('POST', $this->url . '/otp', $headers, $body);
 			} else {
 				throw new GoTrueError('You must provide either an email or phone number and a password');
 			}
@@ -338,7 +339,7 @@ class GoTrueClient
 	public function getUser($jwt = null)
 	{
 		try {
-			if (! $jwt) {
+			if (!$jwt) {
 				$sessionResult = $this->getSession($jwt);
 				$sessionData = $sessionResult['data'];
 				$sessionError = $sessionResult['error'];
@@ -351,7 +352,7 @@ class GoTrueClient
 				$jwt = $sessionData['session']['access_token'] ?? null;
 			}
 			$this->headers['Authorization'] = "Bearer {$jwt}";
-			$url = $this->url.'/user';
+			$url = $this->url . '/user';
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$user = $this->__request('GET', $url, $headers);
 
@@ -383,7 +384,7 @@ class GoTrueClient
 	public function updateUser($attrs, $jwt = null, $options = [])
 	{
 		try {
-			if (! $jwt) {
+			if (!$jwt) {
 				$sessionResult = $this->getSession($jwt);
 				$sessionData = $sessionResult['data'];
 				$sessionError = $sessionResult['error'];
@@ -397,7 +398,7 @@ class GoTrueClient
 			}
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$redirectTo = isset($options['redirectTo']) ? "?redirect_to={$options['redirectTo']}" : null;
-			$url = $this->url.'/user'.$redirectTo;
+			$url = $this->url . '/user' . $redirectTo;
 			$body = json_encode($attrs);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('PUT', $url, $headers, $body);
@@ -425,7 +426,7 @@ class GoTrueClient
 	public function refreshSession($jwt = null)
 	{
 		try {
-			if (! $jwt) {
+			if (!$jwt) {
 				$sessionResult = $this->getSession($jwt);
 				$sessionData = $sessionResult['data'];
 				$sessionError = $sessionResult['error'];
@@ -472,14 +473,14 @@ class GoTrueClient
 			$hasExpired = true;
 			$session = null;
 			$payload = Helpers::decodeJWTPayload($currentSession['access_token']);
-			if (! empty($payload['exp'])) {
+			if (!empty($payload['exp'])) {
 				$expiresAt = $payload['exp'];
 				$hasExpired = $expiresAt <= $timeNow ? true : false;
 			}
 
 			if ($hasExpired) {
 				$result = $this->_callRefreshToken($currentSession['refresh_token']);
-				if (! empty($result['error'])) {
+				if (!empty($result['error'])) {
 					return ['data' => ['user' => null, 'session' => null], 'error' => $result['error']];
 				}
 
@@ -489,7 +490,7 @@ class GoTrueClient
 				$session = $result['session'];
 			} else {
 				$result = $this->getUser($currentSession['access_token']);
-				if (! empty($result['error'])) {
+				if (!empty($result['error'])) {
 					throw $result['error'];
 				}
 
@@ -587,7 +588,7 @@ class GoTrueClient
 				'gotrue_meta_security'  => ['captcha_token' => $options['captchaToken'] ?? null],
 			];
 
-			$url = $this->url.'/recover';
+			$url = $this->url . '/recover';
 			$body = json_encode($params);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('PUT', $url, $headers, $body);
@@ -636,7 +637,7 @@ class GoTrueClient
 				return $response;
 			}
 
-			if (! $session) {
+			if (!$session) {
 				$response['data']['currentLevel'] = null;
 				$response['data']['nextLevel'] = null;
 				$response['data']['currentAuthenticationMethods'] = [];
@@ -682,13 +683,13 @@ class GoTrueClient
 	private function _callRefreshToken(string $refreshToken)
 	{
 		try {
-			if (! $refreshToken) {
+			if (!$refreshToken) {
 				throw new AuthSessionMissingError();
 			}
 
 			$data = $this->_refreshAccessToken($refreshToken);
 
-			if (! $data['session']) {
+			if (!$data['session']) {
 				throw new AuthSessionMissingError();
 			}
 
@@ -712,7 +713,7 @@ class GoTrueClient
 	public function _refreshAccessToken($refreshToken)
 	{
 		try {
-			$url = $this->url.'/token?grant_type=refresh_token';
+			$url = $this->url . '/token?grant_type=refresh_token';
 			print_r($refreshToken);
 			$body = json_encode(['refresh_token' => $refreshToken]);
 			$this->headers['Authorization'] = "Bearer {$refreshToken}";

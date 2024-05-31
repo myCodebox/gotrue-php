@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'./header.php';
+include __DIR__ . './header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'http';
-$domain = 'localhost:3000';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -17,8 +16,8 @@ $response = $client->signUp([
 	'email'                => 'example@email.com',
 	'password'             => 'example-password',
 	'options'              => [
-		'emailRedirectTo'=> 'https://example.com/welcome',
+		'emailRedirectTo' => 'https://example.com/welcome',
 	],
 	'gotrue_meta_security' => ['captcha_token' => $options['captchaToken'] ?? null],
 ]);
-print_r($response);
+dump($response);

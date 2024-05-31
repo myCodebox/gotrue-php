@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'../../../header.php';
+include __DIR__ . '../../../header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'https';
-$domain = 'supabase.co';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -19,4 +18,4 @@ $userData = [
 ];
 $create_response = $client->admin->createUser($userData);
 $response = $client->admin->deleteUser($create_response['data']['id']);
-print_r($response);
+dump($response);

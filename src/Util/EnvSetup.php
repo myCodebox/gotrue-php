@@ -10,7 +10,7 @@ class EnvSetup
 	{
 		// If the env vars are set and not empty use them
 		$apiKey = getenv('API_KEY');
-		$refId = getenv('REFERENCE_ID');
+		$refId  = getenv('REFERENCE_ID');
 
 		// else check try to load the .env file in the $path
 		if (empty($apiKey) || empty($refId)) {
@@ -33,7 +33,7 @@ class EnvSetup
 		}
 
 		return [
-			'API_KEY' => $apiKey,
+			'API_KEY'      => $apiKey,
 			'REFERENCE_ID' => $refId,
 		];
 	}

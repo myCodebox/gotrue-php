@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'../../header.php';
+include __DIR__ . '../../header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'https';
-$domain = 'supabase.co';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -28,4 +27,4 @@ $response = $client->signInWithPassword([
 $access_token = $response['data']['access_token'];
 
 $user = $client->_getAuthenticatorAssuranceLevel($access_token);
-print_r($user);
+dump($user);

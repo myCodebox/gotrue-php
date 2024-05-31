@@ -1,10 +1,9 @@
 <?php
 
-include __DIR__.'../../header.php';
+include __DIR__ . '../../header.php';
+
 use Supabase\GoTrue\GoTrueClient;
 
-$scheme = 'https';
-$domain = 'supabase.co';
 $path = '/auth/v1';
 
 $client = new GoTrueClient($reference_id, $api_key, [
@@ -28,7 +27,7 @@ $response = $client->signInWithPassword([
 $access_token = $response['data']['access_token'];
 
 //Enroll
-$data = $client->mfa->enroll(['factor_type'=> 'totp'], $access_token);
+$data = $client->mfa->enroll(['factor_type' => 'totp'], $access_token);
 $factor_id = $data['data']['id'];
 $secret = $data['data']['totp']['secret'];
 unset($data['data']['totp']['qr_code']);
@@ -42,7 +41,7 @@ $expires_at = $data_challenge['data']['expires_at'];
 $data_verify = $client->mfa->verify(
 	$factor_id,
 	$access_token,
-	['challenge_id'=> $challenge_id, 'code'=>$secret]
+	['challenge_id' => $challenge_id, 'code' => $secret]
 );
 
 //Challange and Verify

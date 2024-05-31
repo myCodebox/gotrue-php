@@ -18,7 +18,6 @@ class GoTrueMFAApi
 	 *
 	 * @var string
 	 */
-	// protected string $url;
 	protected $url;
 
 	/**
@@ -27,7 +26,6 @@ class GoTrueMFAApi
 	 *
 	 * @var array
 	 */
-	// protected array $headers = [];
 	protected $headers = [];
 	protected $mfa;
 
@@ -92,7 +90,7 @@ class GoTrueMFAApi
 	public function enroll($params = [], $jwt = null)
 	{
 		try {
-			$url = $this->url.'/factors';
+			$url = $this->url . '/factors';
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$body = json_encode($params);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
@@ -117,7 +115,7 @@ class GoTrueMFAApi
 	public function challenge($factor_id, $jwt)
 	{
 		try {
-			$url = $this->url.'/factors/'.$factor_id.'/challenge';
+			$url = $this->url . '/factors/' . $factor_id . '/challenge';
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('POST', $url, $headers);
@@ -144,7 +142,7 @@ class GoTrueMFAApi
 	public function verify($factor_id, $jwt, $params = [])
 	{
 		try {
-			$url = $this->url.'/factors/'.$factor_id.'/verify';
+			$url = $this->url . '/factors/' . $factor_id . '/verify';
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$body = json_encode($params);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
@@ -175,13 +173,13 @@ class GoTrueMFAApi
 			$dataChallange = $this->challenge($factor_id, $jwt);
 
 			if ($dataChallange['error']) {
-				return ['data'=> null, 'error'=> $dataChallange['error']];
+				return ['data' => null, 'error' => $dataChallange['error']];
 			}
 
 			return $this->verify(
 				$factor_id,
 				$jwt,
-				['challenge_id'=> $dataChallange['data']['id'] ?? null, 'code'=>$code]
+				['challenge_id' => $dataChallange['data']['id'] ?? null, 'code' => $code]
 			);
 		} catch (\Exception $e) {
 			throw $e;
@@ -201,13 +199,16 @@ class GoTrueMFAApi
 	public function unenroll($factor_id, $jwt)
 	{
 		try {
-			$url = $this->url.'/factors/'.$factor_id;
+			$url = $this->url . '/factors/' . $factor_id;
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('DELETE', $url, $headers);
 			//$data = json_decode($response->getBody(), true);
 
-			return ['data' => $response, 'error' => null];
+			return [
+				'data' => $response, 
+				'error' => null
+			];
 		} catch (\Exception $e) {
 			throw $e;
 		}

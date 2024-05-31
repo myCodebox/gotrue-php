@@ -65,7 +65,7 @@ class GoTrueAdminApi
 	public function __construct($reference_id, $api_key, $options = [], $domain = 'supabase.co', $scheme = 'https', $path = '/auth/v1')
 	{
 		$headers = ['Authorization' => "Bearer {$api_key}", 'apikey' => $api_key];
-		$this->url = ! empty($reference_id) ? "{$scheme}://{$reference_id}.{$domain}{$path}" : "{$scheme}://{$domain}{$path}";
+		$this->url = !empty($reference_id) ? "{$scheme}://{$reference_id}.{$domain}{$path}" : "{$scheme}://{$domain}{$path}";
 		$this->headers = $headers ?? null;
 		$this->headers = array_merge(Constants::getDefaultHeaders(), $headers);
 	}
@@ -88,7 +88,7 @@ class GoTrueAdminApi
 	public function signOut($jwt)
 	{
 		try {
-			$url = $this->url.'/logout';
+			$url = $this->url . '/logout';
 			$this->headers['Authorization'] = "Bearer {$jwt}";
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json']);
 			$response = $this->__request('POST', $url, $headers);
@@ -116,7 +116,7 @@ class GoTrueAdminApi
 		$data = ['email' => $email, 'data' => $options['data'] ?? null];
 
 		try {
-			$url = $this->url.'/invite'.$redirectTo;
+			$url = $this->url . '/invite' . $redirectTo;
 			$body = json_encode($data);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('POST', $url, $headers, $body);
@@ -148,7 +148,7 @@ class GoTrueAdminApi
 				unset($params['newEmail']);
 			}
 			$data = $params;
-			$url = $this->url.'/admin/generate_link'.$redirectTo;
+			$url = $this->url . '/admin/generate_link' . $redirectTo;
 			$body = json_encode($data);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('POST', $url, $headers, $body);
@@ -187,7 +187,7 @@ class GoTrueAdminApi
 	public function createUser($attrs)
 	{
 		try {
-			$url = $this->url.'/admin/users';
+			$url = $this->url . '/admin/users';
 			$body = json_encode($attrs);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('POST', $url, $headers, $body);
@@ -210,7 +210,7 @@ class GoTrueAdminApi
 	{
 		try {
 			$path = isset($params['page'], $params['perPage']) ? "?page={$params['page']}&per_page={$params['perPage']}" : '';
-			$url = $this->url.'/admin/users'.$path;
+			$url = $this->url . '/admin/users' . $path;
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('GET', $url, $headers);
 			//$users = json_decode($response->getBody(), true);
@@ -236,7 +236,7 @@ class GoTrueAdminApi
 	public function getUserById($uid)
 	{
 		try {
-			$url = $this->url.'/admin/users/'.$uid;
+			$url = $this->url . '/admin/users/' . $uid;
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json']);
 			$response = $this->__request('GET', $url, $headers);
 
@@ -274,7 +274,7 @@ class GoTrueAdminApi
 	public function updateUserById($uid, $attrs)
 	{
 		try {
-			$url = $this->url.'/admin/users/'.$uid;
+			$url = $this->url . '/admin/users/' . $uid;
 			$body = json_encode($attrs);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('PUT', $url, $headers, $body);
@@ -298,7 +298,7 @@ class GoTrueAdminApi
 	public function deleteUser($uid, $shouldSoftDelete = false)
 	{
 		try {
-			$url = $this->url."/admin/users/{$uid}";
+			$url = $this->url . "/admin/users/{$uid}";
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$body = json_encode(['should_soft_delete' => $shouldSoftDelete]);
 			$response = $this->__request('DELETE', $url, $headers, $body);
@@ -331,7 +331,7 @@ class GoTrueAdminApi
 					'captcha_token' => $captchaToken,
 				],
 			];
-			$url = $this->url.'/recover'.$redirectTo;
+			$url = $this->url . '/recover' . $redirectTo;
 			$body = json_encode($data);
 			$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
 			$response = $this->__request('POST', $url, $headers, $body);
@@ -353,7 +353,7 @@ class GoTrueAdminApi
 	public function _listFactors($uid)
 	{
 		$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
-		$response = $this->__request('GET', $this->url.'/admin/users/'.$uid.'/factors', $headers);
+		$response = $this->__request('GET', $this->url . '/admin/users/' . $uid . '/factors', $headers);
 
 		return ['data' => $response, 'error' => null];
 	}
@@ -371,8 +371,11 @@ class GoTrueAdminApi
 	public function _deleteFactor($uid, $factorId)
 	{
 		$headers = array_merge($this->headers, ['Content-Type' => 'application/json', 'noResolveJson' => true]);
-		$response = $this->__request('DELETE', $this->url.'/admin/users/'.$uid.'/factors/'.$factorId, $headers);
+		$response = $this->__request('DELETE', $this->url . '/admin/users/' . $uid . '/factors/' . $factorId, $headers);
 
-		return ['data' => $response, 'error' => null];
+		return [
+			'data' => $response,
+			'error' => null
+		];
 	}
 }

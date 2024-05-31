@@ -10,7 +10,7 @@ class Request
 	{
 		try {
 			$request = new \GuzzleHttp\Psr7\Request($method, $url, $headers, $body);
-			$client = new \GuzzleHttp\Client();
+			$client  = new \GuzzleHttp\Client();
 			$promise = $client->sendAsync($request)->then(function ($response) {
 				return $response;
 			});
@@ -27,9 +27,9 @@ class Request
 	{
 		if (method_exists($error, 'getResponse')) {
 			$response = $error->getResponse();
-			$data = json_decode($response->getBody(), true);
-			fwrite(STDERR, print_r($data, true));			
-			if(isset($data['error'])) {
+			$data     = json_decode($response->getBody(), true);
+			fwrite(STDERR, print_r($data, true));
+			if (isset($data['error'])) {
 				$error = new GoTrueApiError($data['error'], $data['error_description'], $data['error'], $data['error_description'], $response);
 			} else {
 				$error = new GoTrueApiError($data['code'], $data['msg'], $data['code'], $data['msg'], $response);
