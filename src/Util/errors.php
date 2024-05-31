@@ -25,7 +25,7 @@ class AuthUnknownError extends AuthError
 	{
 		super(message);
 		$this->name = 'AuthUnknownError';
-		$this->originalError = $thisoriginalError;
+		$this->originalError = $originalError;
 	}
 }
 
